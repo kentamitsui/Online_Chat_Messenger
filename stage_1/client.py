@@ -2,9 +2,9 @@ import socket, threading
 
 def send_message(client_socket, server_address_port, username):
     while True:
-        message = input("\nplease input message: ")
-        bytes_message = message.encode("utf-8")
         bytes_username = username.encode("utf-8")
+        message = input("please input message: ")
+        bytes_message = message.encode("utf-8")
         header = bytes([len(bytes_username)])
         inputcontents = header + bytes_username + bytes_message
         
@@ -14,9 +14,6 @@ def send_message(client_socket, server_address_port, username):
 def receive_message(client_socket):
     while True:
         data, address = client_socket.recvfrom(4096)
-
-
-        # message = address[0:1 + address:].decode("utf-8")
         print(data.decode("utf-8"))
 
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

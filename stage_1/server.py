@@ -19,13 +19,13 @@ while True:
         length_username = data[0]
         # decode username and message send from client side
         # client =>> server
-        username = data[1:1 + length_username].decode("utf-8")
-        
+        username = data[1:length_username + 1].decode("utf-8")
+        sentence = data[length_username + 1:].decode("utf-8")
         # send format sentence to client side
         # server ==>> client
-        formatted_message = f"message from: {username}\naddress: {address}".encode("utf-8")
+        formatted_message = f"\nmessage: {sentence} from: {username}\naddress: {address}".encode("utf-8")
 
-        print(f"username: {username}\nmessage: {address}\n")
+        print(f"\nmessage: {sentence} from: {username}\naddress: {address}")
         for client_address in clients.keys():
             if client_address != address:
                 server_socket.sendto(formatted_message, client_address)
