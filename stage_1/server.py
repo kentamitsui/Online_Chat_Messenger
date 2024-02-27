@@ -16,9 +16,19 @@ while True:
             clients[address] = True
             print(f"New client connected: {address}")
 
+        length_username = data[0]
+        # decode username and message send from client side
+        # client =>> server
+        username = data[1:1 + length_username].decode("utf-8")
+        
+        # send format sentence to client side
+        # server ==>> client
+        formatted_message = f"message from: {username}\naddress: {address}".encode("utf-8")
+
+        print(f"username: {username}\nmessage: {address}\n")
         for client_address in clients.keys():
             if client_address != address:
-                server_socket.sendto(data, client_address)
+                server_socket.sendto(formatted_message, client_address)
 
         print(clients)
     except Exception as e:
