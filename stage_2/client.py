@@ -29,18 +29,18 @@ def connect_udp():
     server_address = "localhost"
     server_port = 9001
 
-    try:
-        message = input("please input message: ")
-        inputcontents = f"message: {message}".encode("utf-8")
+    while True:
+        try:
+            message = input("please input message: ")
+            inputcontents = f"message: {message}".encode("utf-8")
 
-        client_socket.sendto(inputcontents, (server_address, server_port))
+            client_socket.sendto(inputcontents, (server_address, server_port))
 
-        while True:
             data, server = client_socket.recvfrom(4096)
             print(data.decode("utf-8"))
 
-    finally:
-        client_socket.close()
-        pass
+        finally:
+            client_socket.close()
+            pass
     
 connect_udp()

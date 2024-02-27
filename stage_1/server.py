@@ -19,6 +19,7 @@ while True:
         for client_address in clients.keys():
             if client_address != address:
                 server_socket.sendto(data, client_address)
-                
+
+        print(clients)
     except Exception as e:
         print(f"error: " + e)
