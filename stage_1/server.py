@@ -20,26 +20,26 @@ while True:
         message = data[length_username + 5:].decode("utf-8")
         
         current_time = int(time.time())
-        clients[address] = {"last_active time": current_time, "errors": 0}
+        clients[address] = {"last_active time": current_time, "errors": 0, "active": True}
         # send format sentence to client side
         # server ==>> client
         formatted_message = f"\nmessage: {message} from: {username}\naddress: {address}".encode("utf-8")
         print(formatted_message.decode("utf-8"))
-        
+
         for client_address, info in list(clients.items()):
             if (current_time - info["last_active time"] > 60) or (info["errors"] >= 5):
                 print(f"removing client: {username}")
-                formatted_message = f"\n{username} is remove from room".encode("utf-8")
-                server_socket.sendto(formatted_message, client_address)
-                del clients[client_address]
-            else:
-                for client_address in clients.keys():
-                    try:
-                        if client_address != address:
-                            server_socket.sendto(formatted_message, client_address)
-                    except Exception as error:
-                        clients[client_address]["errors"] += 1
-                        print(f"error sending to {client_address}: {error}")                
+                message_remove = f"\n{username} is remove from room".encode("utf-8")
+                server_socket.sendto(message_remove, client_address)
+                clients[client_address]["active"] = False
+                                
+        for client_address in clients.keys():
+            try:
+                if client_address != address:
+                    server_socket.sendto(formatted_message, client_address)
+            except Exception as error:
+                clients[client_address]["errors"] += 1
+                print(f"error sending to {client_address}: {error}")                
 
     except Exception as e:
         print(f"error: {e}")
