@@ -18,7 +18,7 @@ def receive_message(client_socket):
     while True:
         data, address = client_socket.recvfrom(4096)
         print(data.decode("utf-8"))
-
+        
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 server_address_port = ("localhost", 9001)
 

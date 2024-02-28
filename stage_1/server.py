@@ -25,20 +25,21 @@ while True:
         # server ==>> client
         formatted_message = f"\nmessage: {message} from: {username}\naddress: {address}".encode("utf-8")
         print(formatted_message.decode("utf-8"))
-
-        for client_address in clients.keys():
-            try:
-                if client_address != address:
-                    server_socket.sendto(formatted_message, client_address)
-            except Exception as error:
-                clients[client_address]["errors"] += 1
-                print(f"error sending to {client_address}: {error}")                
-
+        
         for client_address, info in list(clients.items()):
             if (current_time - info["last_active time"] > 60) or (info["errors"] >= 5):
-                print(f"removing client: {client_address}")
+                print(f"removing client: {username}")
+                formatted_message = f"\n{username} is remove from room".encode("utf-8")
+                server_socket.sendto(formatted_message, client_address)
                 del clients[client_address]
+            else:
+                for client_address in clients.keys():
+                    try:
+                        if client_address != address:
+                            server_socket.sendto(formatted_message, client_address)
+                    except Exception as error:
+                        clients[client_address]["errors"] += 1
+                        print(f"error sending to {client_address}: {error}")                
 
-        # print(list(clients.items()))
     except Exception as e:
         print(f"error: {e}")
