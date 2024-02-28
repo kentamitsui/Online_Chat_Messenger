@@ -1,11 +1,14 @@
-import socket, threading
+import socket, threading, time
 
 def send_message(client_socket, server_address_port, username):
     while True:
         bytes_username = username.encode("utf-8")
         message = input("please input message: ")
         bytes_message = message.encode("utf-8")
-        header = bytes([len(bytes_username)])
+        # include the current timestamp data
+        timestamp = int(time.time()).to_bytes(4, byteorder="big")
+        
+        header = bytes([len(bytes_username)]) + timestamp
         inputcontents = header + bytes_username + bytes_message
         
         if len(inputcontents) <= 4096:
