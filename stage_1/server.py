@@ -26,10 +26,6 @@ while True:
         formatted_message = f"\nmessage: {message} from: {username}\naddress: {address}".encode("utf-8")
         print(formatted_message.decode("utf-8"))
 
-        if client_address not in clients:
-            clients[client_address] = True
-            print(f"New client connected: {client_address}")
-        
         for client_address in clients.keys():
             try:
                 if client_address != address:
@@ -40,9 +36,9 @@ while True:
 
         for client_address, info in list(clients.items()):
             if (current_time - info["last_active time"] > 60) or (info["errors"] >= 5):
-                print(f"removing client {client_address}")
+                print(f"removing client: {client_address}")
                 del clients[client_address]
-        
 
+        # print(list(clients.items()))
     except Exception as e:
         print(f"error: {e}")
