@@ -28,13 +28,15 @@ while True:
 
         for client_address, info in list(clients.items()):
             if (current_time - info["last_active time"] > 60) or (info["errors"] >= 5):
+                message_disconnect = f"\n{username} is disconnected room".encode("utf-8")
+                server_socket.sendto(message_disconnect, client_address)
+                server_socket.sendto("you were disconnected".encode("utf-8"), address)
                 print(f"removing client: {username}")
-                message_remove = f"\n{username} is remove from room".encode("utf-8")
-                server_socket.sendto(message_remove, client_address)
                 clients[client_address]["active"] = False
                 continue
             
-            if clients[client_address]["active"]:
+            # if clients[client_address]["active"]:
+            if info["active"]:
                 try:
                     if client_address != address:
                         server_socket.sendto(formatted_message, client_address)
