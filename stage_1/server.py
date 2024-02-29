@@ -32,14 +32,15 @@ while True:
                 message_remove = f"\n{username} is remove from room".encode("utf-8")
                 server_socket.sendto(message_remove, client_address)
                 clients[client_address]["active"] = False
-                                
-        for client_address in clients.keys():
-            try:
-                if client_address != address:
-                    server_socket.sendto(formatted_message, client_address)
-            except Exception as error:
-                clients[client_address]["errors"] += 1
-                print(f"error sending to {client_address}: {error}")                
+                continue
+            
+            if clients[client_address]["active"]:
+                try:
+                    if client_address != address:
+                        server_socket.sendto(formatted_message, client_address)
+                except Exception as error:
+                    clients[client_address]["errors"] += 1
+                    print(f"error sending to {client_address}: {error}")                
 
     except Exception as e:
         print(f"error: {e}")
